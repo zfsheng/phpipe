@@ -123,12 +123,17 @@ def mock_fits_withN(ra,dec,EXP,time,prihdr,data,filter_data,num,path):
         fT = 'N'
     else: 
         fT = filter_data[3]
-
+        
+    c = SkyCoord(ra,dec,unit=(u.deg, u.deg))
+    obj='J{0}{1}'.format(c.ra.to_string(unit=u.hourangle, sep='', precision=0, pad=True),
+           c.dec.to_string(sep='', precision=0, alwayssign=True, pad=True))
   
             
-    tt = time.iso.replace(' ' ,'_').replace('-','').replace(':','')[2:-4]    
+#    tt = time.iso.replace(' ' ,'_').replace('-','').replace(':','')[2:-4]
+    tt = time.iso.replace(' ' ,'_').replace('-','').replace(':','')[2:]     
     #    'BN' + '00_'+tt+'_001'+'.fits' 
-    filename = filter_data[2] + fT + fI + '_'+tt + '_'+'{:03d}'.format(num) + '.fits'
+#    filename = filter_data[2] + fT + fI + '_'+tt + '_'+'{:03d}'.format(num) + '.fits'
+    filename = obj+'_DZ925_BR_DD_F' + fI +'_'+tt + '_' +'1m2test'+'.fits'
 #    filename = filter_data[2] + fT + fI + '_'+tt  + '.fits'
     # header setting
     prihdr['CHANNEL'] = filter_data[2]   #sting.  B or R
@@ -173,9 +178,10 @@ plt.ylabel('Dec')
 
 
 #####################################################
+
 c = SkyCoord(ra,dec,unit=(u.deg, u.deg))
-obj='SDSS_J{0}{1}'.format(c.ra.to_string(unit=u.hourangle, sep='', precision=2, pad=True),
-           c.dec.to_string(sep='', precision=2, alwayssign=True, pad=True))
+obj='J{0}{1}'.format(c.ra.to_string(unit=u.hourangle, sep='', precision=0, pad=True),
+           c.dec.to_string(sep='', precision=0, alwayssign=True, pad=True))
 
 obj='obj'
 # Initialization
@@ -211,8 +217,9 @@ plt.imshow(data, origin='lower',vmin=-0.2,vmax=0.2, cmap=plt.cm.viridis)
 exp=1800
  
 #import numpy as np
-path='data3/'
-for i in xrange(5):
+path='data4/'
+#for i in xrange(1):
+for i in [1,2,3,4,6]:    
 #    II=np.random.randint(11)
     ff=[0,1,2,0,1,1,6,7]
     II=ff[i]
@@ -225,9 +232,9 @@ for i in xrange(5):
         data=scipy.ndimage.rotate(hdu[0].data,i,reshape=False)
         err=np.random.normal(0,0.1,data.size) # generate error from N(0,0.1)
         err=err.reshape(data.shape)
-        pdb.set_trace()
+#        pdb.set_trace()
         data=data+err
 #        mock_fits(ra,dec,exp,time_grid[jj],prihdr,data,RED_FILTER[II],path)
 #        mock_fits(ra,dec,exp,time_grid[jj],prihdr,data,BLUE_FILTER[II],path)
-        mock_fits_withN(ra,dec,exp,time_grid[jj],prihdr,data,RED_FILTER[II],i,path)
+#        mock_fits_withN(ra,dec,exp,time_grid[jj],prihdr,data,RED_FILTER[II],i,path)
         mock_fits_withN(ra,dec,exp,time_grid[jj],prihdr,data,BLUE_FILTER[II],i,path)
